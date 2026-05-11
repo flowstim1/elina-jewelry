@@ -723,7 +723,7 @@ function renderLiveGrid() {
     
     grid.innerHTML = allProducts.map(p => `
         <div class="live-item" id="live-${p.id}">
-            <div class="live-thumb">${p.image_url ? `<img src="http://localhost:3001${p.image_url}">` : '✦'}</div>
+            <div class="live-thumb">${p.image_url ? `<img src="${API_URL.replace('/api', '')}${p.image_url}">` : '✦'}</div>
             <div class="live-details">
                 <div class="live-name">${escapeHtml(p.name)}</div>
                 <div class="live-mat">${p.category}${p.material ? ' · '+p.material : ''}</div>
@@ -791,7 +791,7 @@ function updateCartUI() {
         itemCount += (item.quantity || 1);
         return `
             <div class="cart-item">
-                <div class="cart-item-img">${item.image_url ? `<img src="http://localhost:3001${item.image_url}">` : '✦'}</div>
+                <div class="cart-item-img">${item.image_url ? `<img src="${API_URL.replace('/api', '')}${item.image_url}">` : '✦'}</div>
                 <div class="cart-item-details">
                     <div class="cart-item-name">${escapeHtml(item.name)}</div>
                     <div class="cart-item-price">€${item.price}</div>
