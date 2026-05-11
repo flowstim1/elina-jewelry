@@ -463,7 +463,7 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
       <div class="section-label">New Collection 2025</div>
       <h2 class="section-title">The <em>Blossom</em><br>Catalogue</h2>
     </div>
-    <button class="section-link" onclick="scrollTo('collection')">View All Pieces</button>
+    <button class="section-link" onclick="scrollToSection('collection')">View All Pieces</button>
   </div>
   <div class="product-grid reveal" id="productGrid"></div>
 </section>
@@ -621,6 +621,7 @@ const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isInt
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
 function scrollToSection(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+
 // ==================== WHATSAPP BUTTERFLY ====================
 let popupTimeout;
 document.getElementById('whatsappBtn').addEventListener('click', () => {
@@ -644,27 +645,19 @@ async function loadProducts() {
         console.log('Products loaded:', allProducts);
         renderProductGrid();
         renderLiveGrid();
-        if (allProducts.length === 0) {
-            document.getElementById('productGrid').innerHTML = '<div style="text-align:center;padding:60px">✨ No products yet. Add your first piece in the admin panel! ✨</div>';
-        }
     } catch (error) {
         console.error('Error loading products:', error);
-        document.getElementById('productGrid').innerHTML = '<div style="text-align:center;padding:60px;color:red">❌ Cannot connect to backend. Make sure server is running!</div>';
-        showToast('❌ Backend not running!');
+        document.getElementById('productGrid').innerHTML = '<div style="text-align:center;padding:60px;color:red">❌ Cannot connect to backend.</div>';
     }
 }
 
-// Add product to database
-async function addProductToDB(productData, imageFile) {
-    const formData = new FormData();
-    formData.append('name', productData.name);
-    formData.append('price', productData.price);
-    formData.append('material', productData.material || '');
-    formData.append('category', productData.category);
-    formData.append('description', productData.description || '');
-    if (imageFile) formData.append('image', imageFile);
-    
-    const response = await fetch(`${API_URL}/products`, { method: 'POST', body: formData });
+// Add product to database (JSON, not FormData)
+async function addProductToDB(productData) {
+    const response = await fetch(`${API_URL}/products`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+    });
     return response.json();
 }
 
@@ -674,10 +667,11 @@ async function deleteProductFromDB(id) {
     return response.json();
 }
 
-// Render product grid - FIXED for Vercel
+// Render product grid
 function renderProductGrid() {
     const grid = document.getElementById('productGrid');
     if (!grid) return;
+    
     if (allProducts.length === 0) {
         grid.innerHTML = '<div style="text-align:center;padding:60px">✨ No products yet. Add your first piece in the admin panel! ✨</div>';
         return;
@@ -844,7 +838,10 @@ function openProductModal(productId) {
     document.getElementById('productModal').style.display = 'flex';
 }
 
-function openSignatureModal() { const sig = allProducts.find(p => p.id === 1); if(sig) openProductModal(1); }
+function openSignatureModal() { 
+    if(allProducts.length > 0) openProductModal(allProducts[0]._id || allProducts[0].id); 
+    else alert('No products yet');
+}
 function closeModal() { document.getElementById('productModal').style.display = 'none'; currentProductId = null; }
 function orderFromModal() {
     const product = allProducts.find(p => (p._id || p.id) == currentProductId);
@@ -871,7 +868,7 @@ document.addEventListener('keydown', (e) => {
 });
 document.getElementById('panelCloseBtn').addEventListener('click', () => { document.getElementById('owner-panel').classList.remove('open'); });
 
-// Image upload
+// Image upload for preview only (image_url not fully implemented on backend yet)
 let selectedImageFile = null;
 document.getElementById('prodImage').addEventListener('change', (e) => {
     if(e.target.files && e.target.files[0]) {
@@ -884,27 +881,58 @@ document.getElementById('prodImage').addEventListener('change', (e) => {
     }
 });
 
-// Publish product
+// Publish product - Fixed: sending JSON with correct field names
 document.getElementById('publishBtn').addEventListener('click', async () => {
     const name = document.getElementById('prodName').value.trim();
     const price = document.getElementById('prodPrice').value.trim();
     const material = document.getElementById('prodMat').value.trim();
     const category = document.getElementById('prodCat').value;
     const description = document.getElementById('prodDesc').value.trim();
-    if(!name || !price) { alert('Please enter product name and price'); return; }
-    const productData = { name, price, material, category, description };
+    
+    if(!name || !price) { 
+        alert('Please enter product name and price'); 
+        return; 
+    }
+    
+    const productData = {
+        name: name,
+        price: price,
+        material: material || '',
+        category: category,
+        description: description || ''
+    };
+    
+    console.log('Publishing product:', productData);
+    
     try {
-        await addProductToDB(productData, selectedImageFile);
-        await loadProducts();
-        document.getElementById('prodName').value = '';
-        document.getElementById('prodPrice').value = '';
-        document.getElementById('prodMat').value = '';
-        document.getElementById('prodDesc').value = '';
-        document.getElementById('previewGrid').innerHTML = '';
-        selectedImageFile = null;
-        showToast('✨ ' + name + ' published to collection');
+        const response = await fetch(`${API_URL}/products`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Publish result:', result);
+        
+        if (result.success || result.insertedId) {
+            await loadProducts();
+            // Clear form
+            document.getElementById('prodName').value = '';
+            document.getElementById('prodPrice').value = '';
+            document.getElementById('prodMat').value = '';
+            document.getElementById('prodDesc').value = '';
+            document.getElementById('previewGrid').innerHTML = '';
+            selectedImageFile = null;
+            showToast('✨ ' + name + ' published to collection');
+        } else {
+            showToast('❌ Failed to publish: ' + (result.error || 'Unknown error'));
+        }
     } catch(error) { 
-        console.error(error);
+        console.error('Publish error:', error);
         showToast('❌ Failed to publish. Check console for error.'); 
     }
 });
