@@ -603,6 +603,7 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
 <script>
 // ==================== API CONFIGURATION ====================
 const API_URL = 'https://elina-backend-nine.vercel.app/api';
+
 // ==================== CURSOR ====================
 const cursor=document.getElementById('cursor');
 const ring=document.getElementById('cursorRing');
@@ -632,7 +633,7 @@ document.getElementById('whatsappBtn').addEventListener('click', () => {
 function closeWhatsAppPopup(){ document.getElementById('whatsappPopup').classList.remove('show'); }
 setTimeout(() => { const popup = document.getElementById('whatsappPopup'); popup.classList.add('show'); setTimeout(() => popup.classList.remove('show'), 5000); }, 3000);
 
-// ==================== PRODUCTS (FROM AIVEN MYSQL) ====================
+// ==================== PRODUCTS ====================
 let allProducts = [];
 let cart = [];
 
@@ -641,7 +642,7 @@ async function loadProducts() {
     try {
         const response = await fetch(`${API_URL}/products`);
         allProducts = await response.json();
-        console.log('Products loaded from database:', allProducts);
+        console.log('Products loaded:', allProducts);
         renderProductGrid();
         renderLiveGrid();
         if (allProducts.length === 0) {
@@ -649,8 +650,8 @@ async function loadProducts() {
         }
     } catch (error) {
         console.error('Error loading products:', error);
-        document.getElementById('productGrid').innerHTML = '<div style="text-align:center;padding:60px;color:red">❌ Cannot connect to backend. Make sure server is running on port 3001!</div>';
-        showToast('❌ Backend not running! Start with: node server.js');
+        document.getElementById('productGrid').innerHTML = '<div style="text-align:center;padding:60px;color:red">❌ Cannot connect to backend. Make sure server is running!</div>';
+        showToast('❌ Backend not running!');
     }
 }
 
@@ -674,17 +675,19 @@ async function deleteProductFromDB(id) {
     return response.json();
 }
 
-// Render product grid
+// Render product grid - FIXED for Vercel
 function renderProductGrid() {
     const grid = document.getElementById('productGrid');
     if (!grid) return;
     if (allProducts.length === 0) return;
     
+    const baseUrl = API_URL.replace('/api', '');
+    
     grid.innerHTML = allProducts.map(p => `
-        <div class="product-card" data-id="${p.id}">
+        <div class="product-card" data-id="${p._id || p.id}">
             <div class="product-image">
                 <div class="product-placeholder">
-                ${p.image_url ? `<img src="${API_URL.replace('/api', '')}${p.image_url}" alt="${p.name}">` : '<span...'}
+                    ${p.image_url ? `<img src="${baseUrl}${p.image_url}" alt="${p.name}">` : '<span style="font-size:48px;color:rgba(232,180,184,0.5)">✦</span>'}
                 </div>
                 <div class="product-overlay">
                     <div style="display:flex;justify-content:space-between;align-items:flex-end;width:100%">
@@ -703,8 +706,8 @@ function renderProductGrid() {
                     <span class="product-price">€${p.price}</span>
                 </div>
                 <div style="display:flex;gap:10px;margin-top:10px">
-                    <button class="add-to-cart-btn" onclick="addToCart(${p.id})">Add to Cart</button>
-                    <button class="add-to-cart-btn" style="background:white;color:var(--pink);border:1px solid var(--pink)" onclick="openProductModal(${p.id})">View</button>
+                    <button class="add-to-cart-btn" onclick="addToCart('${p._id || p.id}')">Add to Cart</button>
+                    <button class="add-to-cart-btn" style="background:white;color:var(--pink);border:1px solid var(--pink)" onclick="openProductModal('${p._id || p.id}')">View</button>
                 </div>
             </div>
         </div>
@@ -715,21 +718,22 @@ function renderLiveGrid() {
     const grid = document.getElementById('liveGrid');
     if (!grid) return;
     
-    // Show all products in live grid (including default ones)
     if (allProducts.length === 0) {
         grid.innerHTML = '<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">No pieces yet</div></div>';
         return;
     }
     
+    const baseUrl = API_URL.replace('/api', '');
+    
     grid.innerHTML = allProducts.map(p => `
-        <div class="live-item" id="live-${p.id}">
-            <div class="live-thumb">${p.image_url ? `<img src="${API_URL.replace('/api', '')}${p.image_url}">` : '✦'}</div>
+        <div class="live-item" id="live-${p._id || p.id}">
+            <div class="live-thumb">${p.image_url ? `<img src="${baseUrl}${p.image_url}">` : '✦'}</div>
             <div class="live-details">
                 <div class="live-name">${escapeHtml(p.name)}</div>
                 <div class="live-mat">${p.category}${p.material ? ' · '+p.material : ''}</div>
                 <div class="live-price">€${p.price}</div>
             </div>
-            <button class="live-delete" onclick="deleteProduct(${p.id})" title="Delete">✕</button>
+            <button class="live-delete" onclick="deleteProduct('${p._id || p.id}')" title="Delete">✕</button>
         </div>
     `).join('');
 }
@@ -745,17 +749,17 @@ async function deleteProduct(id) {
 
 // Add to cart
 function addToCart(productId) {
-    const product = allProducts.find(p => p.id === productId);
+    const product = allProducts.find(p => (p._id || p.id) == productId);
     if (!product) return;
-    const existing = cart.find(item => item.id === product.id);
+    const existing = cart.find(item => (item._id || item.id) == productId);
     if (existing) { existing.quantity = (existing.quantity || 1) + 1; } 
-    else { cart.push({...product, quantity: 1}); }
+    else { cart.push({...product, quantity: 1, id: product._id || product.id}); }
     saveCart();
     showToast('✨ ' + product.name + ' added to cart');
 }
 
 function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
+    cart = cart.filter(item => (item._id || item.id) != productId);
     saveCart();
     showToast('Item removed from cart');
 }
@@ -782,6 +786,7 @@ function updateCartUI() {
         countSpan.innerText = '0';
         return;
     }
+    const baseUrl = API_URL.replace('/api', '');
     let total = 0;
     let itemCount = 0;
     container.innerHTML = cart.map(item => {
@@ -791,13 +796,13 @@ function updateCartUI() {
         itemCount += (item.quantity || 1);
         return `
             <div class="cart-item">
-                <div class="cart-item-img">${item.image_url ? `<img src="${API_URL.replace('/api', '')}${item.image_url}">` : '✦'}</div>
+                <div class="cart-item-img">${item.image_url ? `<img src="${baseUrl}${item.image_url}">` : '✦'}</div>
                 <div class="cart-item-details">
                     <div class="cart-item-name">${escapeHtml(item.name)}</div>
                     <div class="cart-item-price">€${item.price}</div>
                     <div>Qty: ${item.quantity || 1}</div>
                 </div>
-                <button class="cart-item-remove" onclick="removeFromCart(${item.id})">Remove</button>
+                <button class="cart-item-remove" onclick="removeFromCart('${item._id || item.id}')">Remove</button>
             </div>
         `;
     }).join('');
@@ -822,19 +827,21 @@ function checkout() {
 let currentProductId = null;
 function openProductModal(productId) {
     currentProductId = productId;
-    const product = allProducts.find(p => p.id === productId);
+    const product = allProducts.find(p => (p._id || p.id) == productId);
     if (!product) return;
-    document.getElementById('modalImg').src = product.image_url ? `http://localhost:3001${product.image_url}` : 'https://placehold.co/400x400/F5D6D8/5C4B4B?text=ELINA';
+    const baseUrl = API_URL.replace('/api', '');
+    document.getElementById('modalImg').src = product.image_url ? `${baseUrl}${product.image_url}` : 'https://placehold.co/400x400/F5D6D8/5C4B4B?text=ELINA';
     document.getElementById('modalTitle').innerText = product.name;
     document.getElementById('modalPrice').innerText = '€' + product.price;
     document.getElementById('modalMaterial').innerHTML = product.material || product.category;
     document.getElementById('modalDesc').innerText = product.description || 'Handcrafted with love in our Morocco atelier.';
     document.getElementById('productModal').style.display = 'flex';
 }
+
 function openSignatureModal() { const sig = allProducts.find(p => p.id === 1); if(sig) openProductModal(1); }
 function closeModal() { document.getElementById('productModal').style.display = 'none'; currentProductId = null; }
 function orderFromModal() {
-    const product = allProducts.find(p => p.id === currentProductId);
+    const product = allProducts.find(p => (p._id || p.id) == currentProductId);
     if(product) alert(`✨ ORDER PLACED ✨\n\nPiece: ${product.name}\nAmount: €${product.price}\nPayment: Cash on Delivery`);
     closeModal();
 }
@@ -890,7 +897,10 @@ document.getElementById('publishBtn').addEventListener('click', async () => {
         document.getElementById('previewGrid').innerHTML = '';
         selectedImageFile = null;
         showToast('✨ ' + name + ' published to collection');
-    } catch(error) { showToast('❌ Failed to publish. Make sure backend is running!'); }
+    } catch(error) { 
+        console.error(error);
+        showToast('❌ Failed to publish. Check console for error.'); 
+    }
 });
 
 // Initialize
@@ -898,4 +908,4 @@ loadCart();
 loadProducts();
 </script>
 </body>
-</html>https://7cc7d6cf2eb2a4.lhr.life
+</html>
