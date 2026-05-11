@@ -678,12 +678,17 @@ async function deleteProductFromDB(id) {
 function renderProductGrid() {
     const grid = document.getElementById('productGrid');
     if (!grid) return;
-    if (allProducts.length === 0) return;
+    if (allProducts.length === 0) {
+        grid.innerHTML = '<div style="text-align:center;padding:60px">✨ No products yet. Add your first piece in the admin panel! ✨</div>';
+        return;
+    }
     
     const baseUrl = API_URL.replace('/api', '');
     
-    grid.innerHTML = allProducts.map(p => `
-        <div class="product-card" data-id="${p._id || p.id}">
+    grid.innerHTML = allProducts.map(p => {
+        const productId = p._id || p.id;
+        return `
+        <div class="product-card" data-id="${productId}">
             <div class="product-image">
                 <div class="product-placeholder">
                     ${p.image_url ? `<img src="${baseUrl}${p.image_url}" alt="${p.name}">` : '<span style="font-size:48px;color:rgba(232,180,184,0.5)">✦</span>'}
@@ -705,12 +710,12 @@ function renderProductGrid() {
                     <span class="product-price">€${p.price}</span>
                 </div>
                 <div style="display:flex;gap:10px;margin-top:10px">
-                    <button class="add-to-cart-btn" onclick="addToCart('${p._id || p.id}')">Add to Cart</button>
-                    <button class="add-to-cart-btn" style="background:white;color:var(--pink);border:1px solid var(--pink)" onclick="openProductModal('${p._id || p.id}')">View</button>
+                    <button class="add-to-cart-btn" onclick="addToCart('${productId}')">Add to Cart</button>
+                    <button class="add-to-cart-btn" style="background:white;color:var(--pink);border:1px solid var(--pink)" onclick="openProductModal('${productId}')">View</button>
                 </div>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 function renderLiveGrid() {
@@ -724,17 +729,19 @@ function renderLiveGrid() {
     
     const baseUrl = API_URL.replace('/api', '');
     
-    grid.innerHTML = allProducts.map(p => `
-        <div class="live-item" id="live-${p._id || p.id}">
+    grid.innerHTML = allProducts.map(p => {
+        const productId = p._id || p.id;
+        return `
+        <div class="live-item" id="live-${productId}">
             <div class="live-thumb">${p.image_url ? `<img src="${baseUrl}${p.image_url}">` : '✦'}</div>
             <div class="live-details">
                 <div class="live-name">${escapeHtml(p.name)}</div>
                 <div class="live-mat">${p.category}${p.material ? ' · '+p.material : ''}</div>
                 <div class="live-price">€${p.price}</div>
             </div>
-            <button class="live-delete" onclick="deleteProduct('${p._id || p.id}')" title="Delete">✕</button>
+            <button class="live-delete" onclick="deleteProduct('${productId}')" title="Delete">✕</button>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 // Delete product
