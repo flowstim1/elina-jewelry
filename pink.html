@@ -320,10 +320,10 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
 <nav>
   <div class="nav-logo">ELINA</div>
   <div class="nav-links">
-    <a href="#" onclick="scrollTo('collection')">Collections</a>
-    <a href="#" onclick="scrollTo('story')">Craftsmanship</a>
-    <a href="#" onclick="scrollTo('bespoke')">Bespoke</a>
-    <a href="#" onclick="scrollTo('heritage')">Heritage</a>
+    <a href="#" onclick="scrollToSection('collection')">Collections</a>
+    <a href="#" onclick="scrollToSection('story')">Craftsmanship</a>
+    <a href="#" onclick="scrollToSection('bespoke')">Bespoke</a>
+    <a href="#" onclick="scrollToSection('heritage')">Heritage</a>
   </div>
   <div class="nav-cart" onclick="toggleCart()">🛒 CART <span id="cartCount">0</span></div>
 </nav>
@@ -415,8 +415,8 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
     <h1 class="hero-title">Worn by<br><em>Grace</em></h1>
     <div class="hero-sub">Handcrafted for the Modern Woman</div>
     <div class="hero-cta">
-      <button class="btn-primary" onclick="scrollTo('collection')">Explore Collection</button>
-      <button class="btn-ghost" onclick="scrollTo('story')">Our Story</button>
+      <button class="btn-primary" onclick="scrollToSection('collection')">Explore Collection</button>
+      <button class="btn-ghost" onclick="scrollToSection('story')">Our Story</button>
     </div>
   </div>
   <div class="hero-scroll">
@@ -620,8 +620,7 @@ document.querySelectorAll('button,a,.product-card').forEach(el=>{
 const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});},{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
-function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
-
+function scrollToSection(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
 // ==================== WHATSAPP BUTTERFLY ====================
 let popupTimeout;
 document.getElementById('whatsappBtn').addEventListener('click', () => {
