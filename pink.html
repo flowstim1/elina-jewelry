@@ -684,7 +684,7 @@ function renderProductGrid() {
         <div class="product-card" data-id="${p.id}">
             <div class="product-image">
                 <div class="product-placeholder">
-                    ${p.image_url ? `<img src="http://localhost:3001${p.image_url}" alt="${p.name}">` : '<span style="font-size:48px;color:rgba(232,180,184,0.5)">✦</span>'}
+                ${p.image_url ? `<img src="${API_URL.replace('/api', '')}${p.image_url}" alt="${p.name}">` : '<span...'}
                 </div>
                 <div class="product-overlay">
                     <div style="display:flex;justify-content:space-between;align-items:flex-end;width:100%">
