@@ -323,7 +323,7 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
 <!-- WHATSAPP BUTTERFLY -->
 <div class="whatsapp-butterfly" id="whatsappBtn">
   <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="whatsGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E8B4B8"/><stop offset="100%" style="stop-color:#25D366"/></linearGradient></defs>
+    <defs><linearGradient id="whatsGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8B4B8"/><stop offset="100%" stop-color="#25D366"/></linearGradient></defs>
     <path class="wing-left" d="M30 30 C22 18,8 15,5 22 C2 29,12 40,22 44 C28 46,26 38,30 30Z" fill="url(#whatsGrad)" opacity="0.9"/>
     <path class="wing-right" d="M30 30 C38 18,52 15,55 22 C58 29,48 40,38 44 C32 46,34 38,30 30Z" fill="url(#whatsGrad)" opacity="0.9"/>
     <path d="M30 30 C25 42,20 52,25 56 C30 60,35 58,32 52 C29 46,28 38,30 30Z" fill="#E8B4B8" opacity="0.7"/>
@@ -461,28 +461,36 @@ async function loadProducts() {
 function renderProductGrid() {
     const grid = document.getElementById('productGrid');
     if (!grid) return;
+    
     if (allProducts.length === 0) {
         grid.innerHTML = '<div style="text-align:center;padding:60px">✨ No products yet. Add your first piece in the admin panel! ✨</div>';
         return;
     }
+    
     grid.innerHTML = allProducts.map(p => {
         const productId = p._id || p.id;
         return `
         <div class="product-card" data-id="${productId}">
             <div class="product-image">
                 <div class="product-placeholder">
-                    ${p.image_base64 ? `<img src="${p.image_base64}" alt="${p.name}">` : '<span style="font-size:48px;color:rgba(232,180,184,0.5)">✦</span>'}
+                    ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}">` : '<span style="font-size:48px;color:rgba(232,180,184,0.5)">✦</span>'}
                 </div>
                 <div class="product-overlay">
                     <div style="display:flex;justify-content:space-between;align-items:flex-end;width:100%">
-                        <div><div style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:var(--darktext);margin-bottom:6px">${escapeHtml(p.name)}</div><div style="font-size:10px;letter-spacing:0.2em;color:var(--dustyrose)">${escapeHtml(p.material || p.category)}</div></div>
+                        <div>
+                            <div style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:var(--darktext);margin-bottom:6px">${escapeHtml(p.name)}</div>
+                            <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dustyrose)">${escapeHtml(p.material || p.category)}</div>
+                        </div>
                         <div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;color:var(--pink)">€${p.price}</div>
                     </div>
                 </div>
             </div>
             <div class="product-info">
                 <div class="product-name">${escapeHtml(p.name)}</div>
-                <div class="product-meta"><span class="product-material">${escapeHtml(p.material || p.category)}</span><span class="product-price">€${p.price}</span></div>
+                <div class="product-meta">
+                    <span class="product-material">${escapeHtml(p.material || p.category)}</span>
+                    <span class="product-price">€${p.price}</span>
+                </div>
                 <div style="display:flex;gap:10px;margin-top:10px">
                     <button class="add-to-cart-btn" onclick="addToCart('${productId}')">Add to Cart</button>
                     <button class="add-to-cart-btn" style="background:white;color:var(--pink);border:1px solid var(--pink)" onclick="openProductModal('${productId}')">View</button>
@@ -547,7 +555,7 @@ function updateCartUI() {
         const itemTotal = priceNum * (item.quantity || 1);
         total += itemTotal;
         itemCount += (item.quantity || 1);
-        return `<div class="cart-item"><div class="cart-item-img">${item.image_base64 ? `<img src="${item.image_base64}">` : '✦'}</div><div class="cart-item-details"><div class="cart-item-name">${escapeHtml(item.name)}</div><div class="cart-item-price">€${item.price}</div><div>Qty: ${item.quantity || 1}</div></div><button class="cart-item-remove" onclick="removeFromCart('${item._id || item.id}')">Remove</button></div>`;
+        return `<div class="cart-item"><div class="cart-item-img">${item.image_url ? `<img src="${item.image_url}">` : '✦'}</div><div class="cart-item-details"><div class="cart-item-name">${escapeHtml(item.name)}</div><div class="cart-item-price">€${item.price}</div><div>Qty: ${item.quantity || 1}</div></div><button class="cart-item-remove" onclick="removeFromCart('${item._id || item.id}')">Remove</button></div>`;
     }).join('');
     totalSpan.innerText = '€' + total.toLocaleString();
     countSpan.innerText = itemCount;
@@ -570,7 +578,7 @@ function openProductModal(productId) {
     currentProductId = productId;
     const product = allProducts.find(p => (p._id || p.id) == productId);
     if (!product) return;
-    document.getElementById('modalImg').src = product.image_base64 || 'https://placehold.co/400x400/F5D6D8/5C4B4B?text=ELINA';
+    document.getElementById('modalImg').src = product.image_url || 'https://placehold.co/400x400/F5D6D8/5C4B4B?text=ELINA';
     document.getElementById('modalTitle').innerText = product.name;
     document.getElementById('modalPrice').innerText = '€' + product.price;
     document.getElementById('modalMaterial').innerHTML = product.material || product.category;
@@ -604,24 +612,24 @@ document.addEventListener('keydown', (e) => {
 });
 document.getElementById('panelCloseBtn').addEventListener('click', () => { document.getElementById('owner-panel').classList.remove('open'); });
 
-// IMAGE UPLOAD
-let selectedImageBase64 = null;
+// IMAGE UPLOAD (FileReader for preview only, actual upload via FormData)
+let selectedImageFile = null;
 document.getElementById('prodImage').addEventListener('change', (e) => {
     if(e.target.files && e.target.files[0]) {
+        selectedImageFile = e.target.files[0];
         const reader = new FileReader();
         reader.onload = function(event) {
-            selectedImageBase64 = event.target.result;
             const preview = document.getElementById('previewGrid');
             preview.innerHTML = '';
             const div = document.createElement('div'); div.className = 'preview-thumb';
-            const img = document.createElement('img'); img.src = selectedImageBase64;
+            const img = document.createElement('img'); img.src = event.target.result;
             div.appendChild(img); preview.appendChild(div);
         };
         reader.readAsDataURL(e.target.files[0]);
     }
 });
 
-// PUBLISH PRODUCT
+// PUBLISH PRODUCT with FormData (for file upload)
 document.getElementById('publishBtn').addEventListener('click', async () => {
     const name = document.getElementById('prodName').value.trim();
     const price = document.getElementById('prodPrice').value.trim();
@@ -631,19 +639,18 @@ document.getElementById('publishBtn').addEventListener('click', async () => {
     
     if(!name || !price) { alert('Please enter product name and price'); return; }
     
-    const productData = {
-        name, price,
-        material: material || '',
-        category,
-        description: description || '',
-        image_base64: selectedImageBase64 || ''
-    };
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price', price);
+    formData.append('material', material || '');
+    formData.append('category', category);
+    formData.append('description', description || '');
+    if (selectedImageFile) formData.append('image', selectedImageFile);
     
     try {
         const response = await fetch(`${API_URL}/products`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(productData)
+            body: formData
         });
         
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -658,7 +665,7 @@ document.getElementById('publishBtn').addEventListener('click', async () => {
             document.getElementById('prodDesc').value = '';
             document.getElementById('prodImage').value = '';
             document.getElementById('previewGrid').innerHTML = '';
-            selectedImageBase64 = null;
+            selectedImageFile = null;
             showToast('✨ ' + name + ' published to collection');
         } else {
             showToast('❌ Failed to publish');
