@@ -498,7 +498,7 @@ function renderLiveGrid() {
     if (allProducts.length === 0) { grid.innerHTML = '<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">No pieces yet</div></div>'; return; }
     grid.innerHTML = allProducts.map(p => {
         const productId = p._id || p.id;
-        return `<div class="live-item" id="live-${productId}"><div class="live-thumb">${p.image_base64 ? `<img src="${p.image_base64}">` : '✦'}</div><div class="live-details"><div class="live-name">${escapeHtml(p.name)}</div><div class="live-mat">${p.category}${p.material ? ' · '+p.material : ''}</div><div class="live-price">€${p.price}</div></div><button class="live-delete" onclick="deleteProduct('${productId}')" title="Delete">✕</button></div>`;
+        return `<div class="live-item" id="live-${productId}"><div class="live-thumb">${p.image_url ? `<img src="${p.image_url}">` : '✦'}</div><div class="live-details"><div class="live-name">${escapeHtml(p.name)}</div><div class="live-mat">${p.category}${p.material ? ' · '+p.material : ''}</div><div class="live-price">€${p.price}</div></div><button class="live-delete" onclick="deleteProduct('${productId}')" title="Delete">✕</button></div>`;
     }).join('');
 }
 
