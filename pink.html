@@ -273,14 +273,6 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
 .form-label{font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--pink)}
 .form-input,.form-textarea,.form-select{background:var(--softblush);border:1px solid var(--pink2);color:var(--darktext);padding:14px 20px;font-family:'Jost',sans-serif;font-size:13px;font-weight:300;outline:none;border-radius:10px}
 .form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--pink)}
-.upload-zone{border:2px dashed var(--pink2);padding:48px;display:flex;flex-direction:column;align-items:center;gap:16px;cursor:pointer;transition:all 0.3s;position:relative;border-radius:15px;background:var(--softblush)}
-.upload-zone:hover{border-color:var(--pink);background:rgba(232,180,184,0.05)}
-.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.upload-icon{font-size:32px;color:var(--pink);opacity:0.6}
-.upload-text{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dustyrose)}
-.preview-grid{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
-.preview-thumb{width:60px;height:60px;background:var(--softblush);border:1px solid var(--pink2);border-radius:10px;overflow:hidden}
-.preview-thumb img{width:100%;height:100%;object-fit:cover}
 .btn-publish{padding:18px 48px;background:var(--pink);border:none;color:var(--white);font-size:10px;letter-spacing:0.4em;text-transform:uppercase;cursor:pointer;border-radius:50px;transition:all 0.3s}
 .btn-publish:hover{background:var(--pink3)}
 .live-products{padding-left:60px;border-left:1px solid var(--pink2)}
@@ -356,7 +348,6 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
   <div class="hero-bg"></div>
   <div class="hero-lines"></div>
   
-  <!-- BUTTERFLY LEFT -->
   <div class="butterfly-left">
     <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -383,7 +374,6 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
     </svg>
   </div>
   
-  <!-- BUTTERFLY RIGHT -->
   <div class="butterfly-right">
     <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -425,7 +415,6 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
   </div>
 </section>
 
-<!-- CART SIDEBAR -->
 <div class="cart-sidebar" id="cartSidebar">
   <div class="cart-header">
     <h3>Your Selections</h3>
@@ -480,7 +469,7 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
     <div class="label">The Maison</div>
     <h2>Jewelry that tells<br>your <em>story</em></h2>
     <p>Every ELINA piece begins as a whisper — an emotion, a memory, a dream. Our Moroccan artisans translate these invisible threads into wearable sculpture, each one singular and alive.</p>
-    <p>We work exclusively with ethically sourced diamonds, conflict-free gemstones, and recycled precious metals. Because beauty, to us, carries a conscience.</p>
+    <p>We work exclusively with ethically sourced diamonds, conflict-free gemstones, and recycled precious metals.</p>
     <div class="story-stats">
       <div><div class="stat-value">18K</div><div class="stat-label">Pure Gold</div></div>
       <div><div class="stat-value">200+</div><div class="stat-label">Pieces Created</div></div>
@@ -493,7 +482,7 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
   <div class="featured-bg"></div>
   <div class="featured-tag">✦ Signature Piece ✦</div>
   <h2 class="featured-title">The<br><em>Étoile</em><br>Ring</h2>
-  <p class="featured-desc">A 2.4 carat oval diamond set in an 18K rose gold pavé band. The crown jewel of our Blossom collection — made for the woman who moves worlds.</p>
+  <p class="featured-desc">A 2.4 carat oval diamond set in an 18K rose gold pavé band.</p>
   <div class="featured-showcase">
     <div class="ring-visual">
       <div class="ring-outer"></div>
@@ -513,7 +502,7 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
   <div class="footer-grid">
     <div>
       <div class="footer-brand">ELINA</div>
-      <p class="footer-tagline">Handcrafted fine jewelry for the modern woman. Born in Morocco. Worn by grace.</p>
+      <p class="footer-tagline">Handcrafted fine jewelry. Born in Morocco. Worn by grace.</p>
     </div>
     <div>
       <div class="footer-heading">Collections</div>
@@ -531,7 +520,6 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
         <a href="#">Our Story</a>
         <a href="#">Craftsmanship</a>
         <a href="#">Ethical Sourcing</a>
-        <a href="#">Press</a>
       </div>
     </div>
     <div>
@@ -540,7 +528,6 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
         <a href="#">Atelier, Morocco</a>
         <a href="#">hello@elina.com</a>
         <a href="#">+212 606 028 459</a>
-        <a href="#">Book a Consultation</a>
       </div>
     </div>
   </div>
@@ -588,8 +575,8 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
         <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="prodCat"><option>Ring</option><option>Necklace</option><option>Earrings</option><option>Bracelet</option><option>Bespoke</option></select></div>
       </div>
       <div class="form-group"><label class="form-label">Material & Gemstone</label><input class="form-input" id="prodMat" placeholder="e.g. 18K Rose Gold · 1.2ct Diamond"></div>
-      <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="prodDesc" rows="3" placeholder="Describe the piece — its story, inspiration, and details..."></textarea></div>
-      <div class="form-group"><label class="form-label">Image URL</label><input class="form-input" id="prodImageUrl" type="text" placeholder="https://example.com/your-image.jpg"><div class="upload-sub">Paste a direct image URL (right-click any image → Copy image address)</div></div>
+      <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="prodDesc" rows="3" placeholder="Describe the piece..."></textarea></div>
+      <div class="form-group"><label class="form-label">Image URL</label><input class="form-input" id="prodImageUrl" type="text" placeholder="https://example.com/your-image.jpg"><div class="upload-sub">Paste a direct image URL</div></div>
       <button class="btn-publish" id="publishBtn">Publish to Collection ✦</button>
     </div>
     <div class="live-products">
@@ -637,7 +624,6 @@ setTimeout(() => { const popup = document.getElementById('whatsappPopup'); popup
 let allProducts = [];
 let cart = [];
 
-// Load products from backend
 async function loadProducts() {
     try {
         const response = await fetch(`${API_URL}/products`);
@@ -647,51 +633,32 @@ async function loadProducts() {
         renderLiveGrid();
     } catch (error) {
         console.error('Error loading products:', error);
-        document.getElementById('productGrid').innerHTML = '<div style="text-align:center;padding:60px;color:red">❌ Cannot connect to backend.</div>';
+        const grid = document.getElementById('productGrid');
+        if (grid) grid.innerHTML = '<div style="text-align:center;padding:60px;color:red">❌ Cannot connect to backend.</div>';
     }
 }
 
-// Add product to database (JSON, not FormData)
-async function addProductToDB(productData) {
-    const response = await fetch(`${API_URL}/products`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(productData)
-    });
-    return response.json();
-}
-
-// Delete product from database
-async function deleteProductFromDB(id) {
-    const response = await fetch(`${API_URL}/products/${id}`, { method: 'DELETE' });
-    return response.json();
-}
-
-// Render product grid
 function renderProductGrid() {
     const grid = document.getElementById('productGrid');
     if (!grid) return;
-    
     if (allProducts.length === 0) {
         grid.innerHTML = '<div style="text-align:center;padding:60px">✨ No products yet. Add your first piece in the admin panel! ✨</div>';
         return;
     }
-    
     const baseUrl = API_URL.replace('/api', '');
-    
     grid.innerHTML = allProducts.map(p => {
         const productId = p._id || p.id;
         return `
         <div class="product-card" data-id="${productId}">
             <div class="product-image">
                 <div class="product-placeholder">
-                    ${p.image_url ? `<img src="${baseUrl}${p.image_url}" alt="${p.name}">` : '<span style="font-size:48px;color:rgba(232,180,184,0.5)">✦</span>'}
+                    ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}">` : '<span style="font-size:48px;color:rgba(232,180,184,0.5)">✦</span>'}
                 </div>
                 <div class="product-overlay">
                     <div style="display:flex;justify-content:space-between;align-items:flex-end;width:100%">
                         <div>
                             <div style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:var(--darktext);margin-bottom:6px">${escapeHtml(p.name)}</div>
-                            <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dustyrose)">${escapeHtml(p.material || p.category)}</div>
+                            <div style="font-size:10px;letter-spacing:0.2em;color:var(--dustyrose)">${escapeHtml(p.material || p.category)}</div>
                         </div>
                         <div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;color:var(--pink)">€${p.price}</div>
                     </div>
@@ -715,19 +682,15 @@ function renderProductGrid() {
 function renderLiveGrid() {
     const grid = document.getElementById('liveGrid');
     if (!grid) return;
-    
     if (allProducts.length === 0) {
         grid.innerHTML = '<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">No pieces yet</div></div>';
         return;
     }
-    
-    const baseUrl = API_URL.replace('/api', '');
-    
     grid.innerHTML = allProducts.map(p => {
         const productId = p._id || p.id;
         return `
         <div class="live-item" id="live-${productId}">
-            <div class="live-thumb">${p.image_url ? `<img src="${baseUrl}${p.image_url}">` : '✦'}</div>
+            <div class="live-thumb">${p.image_url ? `<img src="${p.image_url}">` : '✦'}</div>
             <div class="live-details">
                 <div class="live-name">${escapeHtml(p.name)}</div>
                 <div class="live-mat">${p.category}${p.material ? ' · '+p.material : ''}</div>
@@ -738,16 +701,14 @@ function renderLiveGrid() {
     `}).join('');
 }
 
-// Delete product
 async function deleteProduct(id) {
     if (confirm('Remove this jewel from collection?')) {
-        await deleteProductFromDB(id);
+        await fetch(`${API_URL}/products/${id}`, { method: 'DELETE' });
         await loadProducts();
         showToast('Piece removed from collection');
     }
 }
 
-// Add to cart
 function addToCart(productId) {
     const product = allProducts.find(p => (p._id || p.id) == productId);
     if (!product) return;
@@ -786,7 +747,6 @@ function updateCartUI() {
         countSpan.innerText = '0';
         return;
     }
-    const baseUrl = API_URL.replace('/api', '');
     let total = 0;
     let itemCount = 0;
     container.innerHTML = cart.map(item => {
@@ -796,7 +756,7 @@ function updateCartUI() {
         itemCount += (item.quantity || 1);
         return `
             <div class="cart-item">
-                <div class="cart-item-img">${item.image_url ? `<img src="${baseUrl}${item.image_url}">` : '✦'}</div>
+                <div class="cart-item-img">${item.image_url ? `<img src="${item.image_url}">` : '✦'}</div>
                 <div class="cart-item-details">
                     <div class="cart-item-name">${escapeHtml(item.name)}</div>
                     <div class="cart-item-price">€${item.price}</div>
@@ -814,23 +774,21 @@ function toggleCart() { document.getElementById('cartSidebar').classList.toggle(
 
 function checkout() {
     if (cart.length === 0) { alert('Your cart is empty. Add some pieces first!'); return; }
-    let orderSummary = cart.map(item => `${item.name} - €${item.price} x${item.quantity || 1}`).join('\n');
     let total = cart.reduce((sum, item) => sum + (parseInt(item.price.replace(/,/g, '')) * (item.quantity || 1)), 0);
-    alert(`✨ ORDER PLACED ✨\n\n${orderSummary}\n\nTotal: €${total.toLocaleString()}\n\nPayment: Cash on Delivery\n\nYou will pay when you receive your package.\n\nThank you for shopping at ELINA!`);
+    alert(`✨ ORDER PLACED ✨\n\nTotal: €${total.toLocaleString()}\nPayment: Cash on Delivery\n\nThank you for shopping at ELINA!`);
     cart = [];
     saveCart();
     toggleCart();
     showToast('Order placed successfully!');
 }
 
-// Product modal
 let currentProductId = null;
+
 function openProductModal(productId) {
     currentProductId = productId;
     const product = allProducts.find(p => (p._id || p.id) == productId);
     if (!product) return;
-    const baseUrl = API_URL.replace('/api', '');
-    document.getElementById('modalImg').src = product.image_url ? `${baseUrl}${product.image_url}` : 'https://placehold.co/400x400/F5D6D8/5C4B4B?text=ELINA';
+    document.getElementById('modalImg').src = product.image_url || 'https://placehold.co/400x400/F5D6D8/5C4B4B?text=ELINA';
     document.getElementById('modalTitle').innerText = product.name;
     document.getElementById('modalPrice').innerText = '€' + product.price;
     document.getElementById('modalMaterial').innerHTML = product.material || product.category;
@@ -868,33 +826,18 @@ document.addEventListener('keydown', (e) => {
 });
 document.getElementById('panelCloseBtn').addEventListener('click', () => { document.getElementById('owner-panel').classList.remove('open'); });
 
-
-
-// Publish product - Fixed: sending JSON with correct field names
+// Publish product
 document.getElementById('publishBtn').addEventListener('click', async () => {
     const name = document.getElementById('prodName').value.trim();
     const price = document.getElementById('prodPrice').value.trim();
     const material = document.getElementById('prodMat').value.trim();
     const category = document.getElementById('prodCat').value;
     const description = document.getElementById('prodDesc').value.trim();
-    
-    if(!name || !price) { 
-        alert('Please enter product name and price'); 
-        return; 
-    }
-    
     const image_url = document.getElementById('prodImageUrl').value.trim();
-
-const productData = {
-    name: name,
-    price: price,
-    material: material || '',
-    category: category,
-    description: description || '',
-    image_url: image_url || ''
-};
     
-    console.log('Publishing product:', productData);
+    if(!name || !price) { alert('Please enter product name and price'); return; }
+    
+    const productData = { name, price, material: material || '', category, description: description || '', image_url: image_url || '' };
     
     try {
         const response = await fetch(`${API_URL}/products`, {
@@ -903,32 +846,27 @@ const productData = {
             body: JSON.stringify(productData)
         });
         
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         
         const result = await response.json();
-        console.log('Publish result:', result);
         
         if (result.success || result.insertedId) {
             await loadProducts();
-            // Clear form
             document.getElementById('prodName').value = '';
             document.getElementById('prodPrice').value = '';
             document.getElementById('prodMat').value = '';
             document.getElementById('prodDesc').value = '';
-          showToast('✨ ' + name + ' published to collection');
+            document.getElementById('prodImageUrl').value = '';
+            showToast('✨ ' + name + ' published to collection');
         } else {
             showToast('❌ Failed to publish: ' + (result.error || 'Unknown error'));
         }
     } catch(error) { 
         console.error('Publish error:', error);
         showToast('❌ Failed to publish. Check console for error.'); 
-      document.getElementById('prodImageUrl').value = '';
     }
 });
 
-// Initialize
 loadCart();
 loadProducts();
 </script>
