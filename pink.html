@@ -868,7 +868,7 @@ document.addEventListener('keydown', (e) => {
 });
 document.getElementById('panelCloseBtn').addEventListener('click', () => { document.getElementById('owner-panel').classList.remove('open'); });
 
-// Image upload for preview only (image_url not fully implemented on backend yet)
+// Image upload
 let selectedImageFile = null;
 document.getElementById('prodImage').addEventListener('change', (e) => {
     if(e.target.files && e.target.files[0]) {
@@ -894,13 +894,16 @@ document.getElementById('publishBtn').addEventListener('click', async () => {
         return; 
     }
     
-    const productData = {
-        name: name,
-        price: price,
-        material: material || '',
-        category: category,
-        description: description || ''
-    };
+    const image_url = document.getElementById('prodImageUrl').value.trim();
+
+const productData = {
+    name: name,
+    price: price,
+    material: material || '',
+    category: category,
+    description: description || '',
+    image_url: image_url || ''
+};
     
     console.log('Publishing product:', productData);
     
