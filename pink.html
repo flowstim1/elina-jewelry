@@ -917,9 +917,7 @@ const productData = {
             document.getElementById('prodPrice').value = '';
             document.getElementById('prodMat').value = '';
             document.getElementById('prodDesc').value = '';
-            document.getElementById('previewGrid').innerHTML = '';
-            selectedImageFile = null;
-            showToast('✨ ' + name + ' published to collection');
+          showToast('✨ ' + name + ' published to collection');
         } else {
             showToast('❌ Failed to publish: ' + (result.error || 'Unknown error'));
         }
