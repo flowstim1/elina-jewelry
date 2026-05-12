@@ -589,7 +589,7 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
       </div>
       <div class="form-group"><label class="form-label">Material & Gemstone</label><input class="form-input" id="prodMat" placeholder="e.g. 18K Rose Gold · 1.2ct Diamond"></div>
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="prodDesc" rows="3" placeholder="Describe the piece — its story, inspiration, and details..."></textarea></div>
-      <div class="form-group"><label class="form-label">Product Image</label><div class="upload-zone" id="uploadZone"><input type="file" id="prodImage" accept="image/*"><div class="upload-icon">✦</div><div class="upload-text">Click to upload image</div><div class="upload-sub">JPG, PNG · Max 5MB</div></div><div class="preview-grid" id="previewGrid"></div></div>
+      <div class="form-group"><label class="form-label">Image URL</label><input class="form-input" id="prodImageUrl" type="text" placeholder="https://example.com/your-image.jpg"><div class="upload-sub">Paste a direct image URL (right-click any image → Copy image address)</div></div>
       <button class="btn-publish" id="publishBtn">Publish to Collection ✦</button>
     </div>
     <div class="live-products">
@@ -868,18 +868,7 @@ document.addEventListener('keydown', (e) => {
 });
 document.getElementById('panelCloseBtn').addEventListener('click', () => { document.getElementById('owner-panel').classList.remove('open'); });
 
-// Image upload
-let selectedImageFile = null;
-document.getElementById('prodImage').addEventListener('change', (e) => {
-    if(e.target.files && e.target.files[0]) {
-        selectedImageFile = e.target.files[0];
-        const preview = document.getElementById('previewGrid');
-        preview.innerHTML = '';
-        const div = document.createElement('div'); div.className = 'preview-thumb';
-        const img = document.createElement('img'); img.src = URL.createObjectURL(selectedImageFile);
-        div.appendChild(img); preview.appendChild(div);
-    }
-});
+
 
 // Publish product - Fixed: sending JSON with correct field names
 document.getElementById('publishBtn').addEventListener('click', async () => {
@@ -937,6 +926,7 @@ const productData = {
     } catch(error) { 
         console.error('Publish error:', error);
         showToast('❌ Failed to publish. Check console for error.'); 
+      document.getElementById('prodImageUrl').value = '';
     }
 });
 
