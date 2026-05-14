@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ELINA — Fine Jewelry</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
@@ -32,9 +32,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
 .nav-cart{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--darktext);cursor:pointer;display:flex;align-items:center;gap:8px}
 .nav-cart span{background:var(--pink);color:white;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:10px}
 
-/* NEW HERO SECTION WITH IMAGE */
+/* HERO SECTION - FIXED FOR MOBILE */
 .hero-luxury{
-  height:100vh;
+  min-height:100vh;
   width:100%;
   position:relative;
   display:flex;
@@ -42,18 +42,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
   justify-content:space-between;
   overflow:hidden;
   background:linear-gradient(135deg, #FFF5F5 0%, #FFF0F0 100%);
+  padding:100px 5% 60px;
 }
 @media (max-width:992px){
-  .hero-luxury{flex-direction:column;justify-content:center;text-align:center;height:auto;min-height:100vh;padding:120px 5% 60px}
+  .hero-luxury{
+    flex-direction:column;
+    text-align:center;
+    padding:120px 5% 60px;
+  }
 }
 .hero-content-left{
   flex:1;
-  padding-left:8%;
-  z-index:10;
   max-width:50%;
 }
 @media (max-width:992px){
-  .hero-content-left{max-width:100%;padding:0;text-align:center}
+  .hero-content-left{
+    max-width:100%;
+    margin-bottom:40px;
+  }
 }
 .hero-eyebrow{
   font-size:10px;
@@ -62,9 +68,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
   color:var(--pink);
   margin-bottom:24px;
 }
+@media (max-width:992px){
+  .hero-eyebrow{text-align:center}
+}
 .hero-title{
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(48px,6vw,72px);
+  font-size:clamp(42px,6vw,72px);
   font-weight:300;
   line-height:1.1;
   color:var(--darktext);
@@ -81,14 +90,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
   margin-bottom:32px;
   max-width:400px;
 }
-@media (max-width:992px){.hero-sub{margin-left:auto;margin-right:auto}}
+@media (max-width:992px){
+  .hero-sub{
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
 .hero-cta{
   display:flex;
   gap:24px;
   margin-bottom:48px;
   flex-wrap:wrap;
 }
-@media (max-width:992px){.hero-cta{justify-content:center}}
+@media (max-width:992px){
+  .hero-cta{justify-content:center}
+}
 .btn-primary{
   padding:14px 36px;
   border:1px solid var(--pink);
@@ -124,6 +140,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
 }
 .btn-ghost:hover{color:var(--pink)}
 .btn-ghost:hover::after{background:var(--pink);width:50px}
+@media (max-width:992px){
+  .btn-ghost::after{display:none}
+}
 .hero-meta{
   font-size:9px;
   letter-spacing:0.3em;
@@ -132,22 +151,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
 }
 .hero-image-right{
   flex:1;
-  height:100%;
-  position:relative;
-  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 @media (max-width:992px){
   .hero-image-right{
     width:100%;
-    height:50vh;
-    margin-top:40px;
+    margin-top:20px;
   }
 }
 .hero-image-right img{
   width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center 30%;
+  max-width:500px;
+  height:auto;
+  object-fit:contain;
+  border-radius:20px;
+}
+@media (max-width:992px){
+  .hero-image-right img{
+    max-width:100%;
+    max-height:50vh;
+  }
 }
 .hero-scroll{
   position:absolute;
@@ -290,15 +315,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
 .add-to-cart-btn{background:var(--pink);color:white;border:none;padding:8px 16px;border-radius:30px;font-size:10px;letter-spacing:0.2em;cursor:pointer;margin-top:10px;width:100%}
 .add-to-cart-btn:hover{background:var(--pink3)}
 .story-section{padding:160px 80px;display:grid;grid-template-columns:1fr 1fr;gap:120px;align-items:center;background:var(--cream)}
-@media (max-width:992px){.story-section{padding:60px 5%;grid-template-columns:1fr;gap:60px}}
-.story-visual{position:relative}
-.story-frame{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,rgba(232,180,184,0.12) 0%,rgba(232,180,184,0.03) 100%);border:1px solid var(--pink2);display:flex;align-items:center;justify-content:center;position:relative;border-radius:20px;overflow:hidden}
-.story-frame::before{content:'ELINA';font-family:'Cormorant Garamond',serif;font-size:120px;font-weight:300;color:rgba(232,180,184,0.1);position:absolute;letter-spacing:0.1em}
-.story-ornament{width:60%;height:60%;border:1px solid var(--pink2);position:absolute;animation:rotate 20s linear infinite}
-@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.story-diamond{width:80px;height:80px;border:1px solid var(--pink);transform:rotate(45deg);position:relative;z-index:1}
-.story-diamond::after{content:'';position:absolute;inset:12px;border:1px solid var(--pink2)}
-.story-number{position:absolute;top:32px;left:32px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.3em;color:var(--pink);text-transform:uppercase}
+@media (max-width:992px){.story-section{padding:60px 5%;grid-template-columns:1fr;gap:60px;text-align:center}}
+.story-visual{position:relative;display:flex;justify-content:center}
+.story-frame{width:100%;max-width:400px;aspect-ratio:1;background:linear-gradient(160deg,rgba(232,180,184,0.12) 0%,rgba(232,180,184,0.03) 100%);border:1px solid var(--pink2);display:flex;align-items:center;justify-content:center;position:relative;border-radius:20px;overflow:hidden;margin:0 auto}
+.story-frame img{width:80%;height:auto;border-radius:20px}
+.story-number{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.3em;color:var(--pink);text-transform:uppercase;background:rgba(255,255,255,0.8);padding:4px 12px;border-radius:20px}
 .story-text .label{font-size:9px;letter-spacing:0.5em;text-transform:uppercase;color:var(--pink);margin-bottom:24px}
 .story-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4vw,52px);font-weight:300;line-height:1.1;color:var(--darktext);margin-bottom:36px}
 .story-text h2 em{font-style:italic;color:var(--pink)}
@@ -327,16 +348,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
 footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
 @media (max-width:768px){footer{padding:40px 5%}}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:60px}
-@media (max-width:992px){.footer-grid{grid-template-columns:1fr;gap:40px}}
+@media (max-width:992px){.footer-grid{grid-template-columns:1fr;gap:40px;text-align:center}}
 .footer-brand{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--pink);letter-spacing:0.2em;margin-bottom:20px}
-.footer-tagline{font-size:12px;color:var(--dustyrose);line-height:2;max-width:280px}
+.footer-tagline{font-size:12px;color:var(--dustyrose);line-height:2;max-width:280px;margin:0 auto}
 .footer-heading{font-size:9px;letter-spacing:0.5em;text-transform:uppercase;color:var(--pink);margin-bottom:24px}
 .footer-links{display:flex;flex-direction:column;gap:14px}
 .footer-links a{font-size:13px;color:var(--dustyrose);text-decoration:none;transition:color 0.3s}
 .footer-links a:hover{color:var(--pink)}
 .footer-bottom{padding-top:40px;border-top:1px solid var(--pink2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+@media (max-width:768px){.footer-bottom{flex-direction:column;text-align:center}}
 .footer-copy{font-size:11px;color:var(--dustyrose);letter-spacing:0.1em}
-.footer-legal{display:flex;gap:32px}
+.footer-legal{display:flex;gap:32px;flex-wrap:wrap;justify-content:center}
 .footer-legal a{font-size:11px;color:var(--dustyrose);text-decoration:none}
 .footer-legal a:hover{color:var(--pink)}
 #owner-trigger{position:fixed;bottom:0;right:0;width:50px;height:50px;background:transparent;border:none;cursor:pointer;z-index:200}
@@ -422,11 +444,11 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
 
 <div class="whatsapp-popup" id="whatsappPopup">
   <span>💬 Contact me on WhatsApp</span>
-  <a href="https://wa.me/212606028459" target="_blank">Chat Now →</a>
+  <a href="https://wa.me/212690859142" target="_blank">Chat Now →</a>
   <button class="close-popup" onclick="closeWhatsAppPopup()">✕</button>
 </div>
 
-<!-- NEW HERO SECTION WITH YOUR IMAGE -->
+<!-- HERO SECTION -->
 <section class="hero-luxury">
   <div class="hero-content-left">
     <div class="hero-eyebrow">MAISON ELINA</div>
@@ -461,10 +483,11 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
   <div class="product-grid reveal" id="productGrid"></div>
 </section>
 
+<!-- STORY SECTION WITH YOUR IMAGE AS CENTERPIECE -->
 <section id="story" class="story-section reveal">
   <div class="story-visual">
     <div class="story-frame">
-      <img src="https://res.cloudinary.com/dch2plvwi/image/upload/v1778714556/Gemini_Generated_Image_hplvi1hplvi1hplv_eviuvs.png" alt="Craftsmanship" style="width:80%;height:auto;position:relative;z-index:2;border-radius:20px;">
+      <img src="https://res.cloudinary.com/dch2plvwi/image/upload/v1778714556/Gemini_Generated_Image_hplvi1hplvi1hplv_eviuvs.png" alt="Craftsmanship">
       <div class="story-number">Craftsmanship</div>
     </div>
   </div>
@@ -491,8 +514,16 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
 </section>
 
 <footer id="heritage">
-  <div class="footer-grid"><div><div class="footer-brand">ELINA</div><p class="footer-tagline">Handcrafted fine jewelry. Born in Morocco. Worn by grace.</p></div><div><div class="footer-heading">Collections</div><div class="footer-links"><a href="#">Rings</a><a href="#">Necklaces</a><a href="#">Earrings</a><a href="#">Bracelets</a><a href="#">Bespoke</a></div></div><div><div class="footer-heading">Maison</div><div class="footer-links"><a href="#">Our Story</a><a href="#">Craftsmanship</a><a href="#">Ethical Sourcing</a></div></div><div><div class="footer-heading">Contact</div><div class="footer-links"><a href="#">Atelier, Morocco</a><a href="#">hello@elina.com</a><a href="#">+212 606 028 459</a></div></div></div>
-  <div class="footer-bottom"><div class="footer-copy">© 2025 Maison Elina. Created by Abdellah Abouelmouroua. All rights reserved.</div><div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div></div>
+  <div class="footer-grid">
+    <div><div class="footer-brand">ELINA</div><p class="footer-tagline">Handcrafted fine jewelry. Born in Morocco. Worn by grace.</p></div>
+    <div><div class="footer-heading">Collections</div><div class="footer-links"><a href="#">Rings</a><a href="#">Necklaces</a><a href="#">Earrings</a><a href="#">Bracelets</a><a href="#">Bespoke</a></div></div>
+    <div><div class="footer-heading">Maison</div><div class="footer-links"><a href="#">Our Story</a><a href="#">Craftsmanship</a><a href="#">Ethical Sourcing</a></div></div>
+    <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="#">Atelier, Morocco</a><a href="#">hello@elina.com</a><a href="#">+212 6 90 85 91 42</a></div></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Maison Elina. Created by Abdellah Abouelmouroua. All rights reserved.</div>
+    <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
+  </div>
 </footer>
 
 <div id="productModal" class="modal"><div class="modal-content"><button class="modal-close" onclick="closeModal()">&times;</button><img id="modalImg" class="modal-img" src=""><h2 id="modalTitle"></h2><div id="modalPrice" style="font-size:20px;color:var(--pink);margin:10px 0"></div><div id="modalMaterial" style="font-size:12px;color:var(--dustyrose)"></div><p id="modalDesc" style="margin:15px 0;line-height:1.6"></p><div class="cod-note">💎 Cash on Delivery — Pay when you receive</div><button class="order-btn" onclick="orderFromModal()">Order Now — Cash on Delivery</button><button class="add-to-cart-modal" onclick="addCurrentToCart()">Add to Cart</button></div></div>
