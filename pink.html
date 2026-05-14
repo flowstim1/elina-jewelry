@@ -31,8 +31,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
 .nav-links a:hover{color:var(--pink)}
 .nav-cart{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--darktext);cursor:pointer;display:flex;align-items:center;gap:8px}
 .nav-cart span{background:var(--pink);color:white;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:10px}
+.currency-switcher{display:flex;gap:8px;background:var(--softblush);padding:4px;border-radius:40px;margin-left:20px}
+.currency-btn{background:none;border:none;padding:6px 14px;border-radius:30px;cursor:pointer;font-size:10px;font-weight:500;color:var(--dustyrose);transition:all 0.3s}
+.currency-btn.active{background:var(--pink);color:white}
+.currency-btn:hover:not(.active){background:var(--pink2);color:var(--darktext)}
+@media (max-width:768px){.currency-switcher{margin-left:0}}
 
-/* HERO SECTION - FIXED FOR MOBILE */
+/* HERO SECTION */
 .hero-luxury{
   min-height:100vh;
   width:100%;
@@ -311,7 +316,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 60px;display:fl
 .product-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--darktext);margin-bottom:6px}
 .product-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .product-material{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dustyrose)}
-.product-price{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--pink);font-weight:400}
+.product-price{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--pink);font-weight:400;cursor:pointer}
 .add-to-cart-btn{background:var(--pink);color:white;border:none;padding:8px 16px;border-radius:30px;font-size:10px;letter-spacing:0.2em;cursor:pointer;margin-top:10px;width:100%}
 .add-to-cart-btn:hover{background:var(--pink3)}
 .story-section{padding:160px 80px;display:grid;grid-template-columns:1fr 1fr;gap:120px;align-items:center;background:var(--cream)}
@@ -395,7 +400,7 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
 .live-details{flex:1}
 .live-name{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--darktext);margin-bottom:4px}
 .live-mat{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dustyrose);margin-bottom:8px}
-.live-price{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--pink)}
+.live-price{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--pink);cursor:pointer}
 .live-delete{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--dustyrose);cursor:pointer;font-size:18px}
 .live-edit{position:absolute;top:12px;right:50px;background:none;border:none;color:var(--pink);cursor:pointer;font-size:16px}
 .empty-state{text-align:center;padding:60px 0;color:var(--dustyrose)}
@@ -426,7 +431,13 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
     <a href="#" onclick="scrollToSection('bespoke')">Bespoke</a>
     <a href="#" onclick="scrollToSection('heritage')">Heritage</a>
   </div>
-  <div class="nav-cart" onclick="toggleCart()">🛒 CART <span id="cartCount">0</span></div>
+  <div style="display:flex;align-items:center">
+    <div class="currency-switcher">
+      <button class="currency-btn active" id="currencyUSD">$ USD</button>
+      <button class="currency-btn" id="currencyMAD">DH MAD</button>
+    </div>
+    <div class="nav-cart" onclick="toggleCart()">🛒 CART <span id="cartCount">0</span></div>
+  </div>
 </nav>
 
 <!-- WHATSAPP BUTTERFLY -->
@@ -483,7 +494,7 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
   <div class="product-grid reveal" id="productGrid"></div>
 </section>
 
-<!-- STORY SECTION WITH YOUR IMAGE AS CENTERPIECE -->
+<!-- STORY SECTION -->
 <section id="story" class="story-section reveal">
   <div class="story-visual">
     <div class="story-frame">
@@ -553,6 +564,79 @@ footer{background:var(--cream);padding:80px;border-top:1px solid var(--pink2)}
 <script>
 const API_URL = 'https://elina-backend-nine.vercel.app/api';
 
+// CURRENCY CONFIGURATION
+let currentCurrency = 'USD'; // USD or MAD
+const USD_TO_MAD_RATE = 10; // 1 USD = 10 MAD (you can change this)
+
+// Format price based on currency
+function formatPrice(priceInUSD) {
+    const numPrice = parseFloat(priceInUSD.replace(/,/g, ''));
+    if (currentCurrency === 'MAD') {
+        const inMAD = Math.round(numPrice * USD_TO_MAD_RATE);
+        return inMAD.toLocaleString();
+    }
+    return numPrice.toLocaleString();
+}
+
+function getCurrencySymbol() {
+    return currentCurrency === 'MAD' ? 'DH' : '$';
+}
+
+function formatPriceWithCurrency(priceInUSD) {
+    return getCurrencySymbol() + formatPrice(priceInUSD);
+}
+
+// Update all prices on the page
+function updateAllPrices() {
+    // Update product grid prices
+    document.querySelectorAll('.product-price').forEach(el => {
+        const originalPrice = el.getAttribute('data-original-price');
+        if (originalPrice) {
+            el.innerText = formatPriceWithCurrency(originalPrice);
+        }
+    });
+    
+    // Update cart prices
+    document.querySelectorAll('.cart-item-price').forEach(el => {
+        const originalPrice = el.getAttribute('data-original-price');
+        if (originalPrice) {
+            el.innerText = formatPriceWithCurrency(originalPrice);
+        }
+    });
+    
+    // Update cart total
+    const cartTotal = document.getElementById('cartTotal');
+    if (cartTotal && cartTotal.getAttribute('data-original-total')) {
+        const originalTotal = parseInt(cartTotal.getAttribute('data-original-total'));
+        if (currentCurrency === 'MAD') {
+            cartTotal.innerText = 'DH' + (originalTotal * USD_TO_MAD_RATE).toLocaleString();
+        } else {
+            cartTotal.innerText = '$' + originalTotal.toLocaleString();
+        }
+    }
+    
+    // Update modal price if open
+    const modalPrice = document.getElementById('modalPrice');
+    if (modalPrice && modalPrice.getAttribute('data-original-price')) {
+        modalPrice.innerText = formatPriceWithCurrency(modalPrice.getAttribute('data-original-price'));
+    }
+}
+
+// CURRENCY SWITCHER
+document.getElementById('currencyUSD').addEventListener('click', () => {
+    currentCurrency = 'USD';
+    document.getElementById('currencyUSD').classList.add('active');
+    document.getElementById('currencyMAD').classList.remove('active');
+    updateAllPrices();
+});
+
+document.getElementById('currencyMAD').addEventListener('click', () => {
+    currentCurrency = 'MAD';
+    document.getElementById('currencyMAD').classList.add('active');
+    document.getElementById('currencyUSD').classList.remove('active');
+    updateAllPrices();
+});
+
 // CURSOR
 const cursor=document.getElementById('cursor');
 const ring=document.getElementById('cursorRing');
@@ -605,6 +689,7 @@ function renderProductGrid() {
     }
     grid.innerHTML = allProducts.map(p => {
         const productId = p._id || p.id;
+        const formattedPrice = formatPriceWithCurrency(p.price);
         return `
         <div class="product-card" data-id="${productId}">
             <div class="product-image">
@@ -614,13 +699,13 @@ function renderProductGrid() {
                 <div class="product-overlay">
                     <div style="display:flex;justify-content:space-between;align-items:flex-end;width:100%">
                         <div><div style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:var(--darktext);margin-bottom:6px">${escapeHtml(p.name)}</div><div style="font-size:10px;letter-spacing:0.2em;color:var(--dustyrose)">${escapeHtml(p.material || p.category)}</div></div>
-                        <div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;color:var(--pink)">€${p.price}</div>
+                        <div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;color:var(--pink)"><span class="product-price" data-original-price="${p.price}">${formattedPrice}</span></div>
                     </div>
                 </div>
             </div>
             <div class="product-info">
                 <div class="product-name">${escapeHtml(p.name)}</div>
-                <div class="product-meta"><span class="product-material">${escapeHtml(p.material || p.category)}</span><span class="product-price">€${p.price}</span></div>
+                <div class="product-meta"><span class="product-material">${escapeHtml(p.material || p.category)}</span><span class="product-price" data-original-price="${p.price}">${formattedPrice}</span></div>
                 <div style="display:flex;gap:10px;margin-top:10px">
                     <button class="add-to-cart-btn" onclick="addToCart('${productId}')">Add to Cart</button>
                     <button class="add-to-cart-btn" style="background:white;color:var(--pink);border:1px solid var(--pink)" onclick="openProductModal('${productId}')">View</button>
@@ -636,7 +721,8 @@ function renderLiveGrid() {
     if (allProducts.length === 0) { grid.innerHTML = '<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">No pieces yet</div></div>'; return; }
     grid.innerHTML = allProducts.map(p => {
         const productId = p._id || p.id;
-        return `<div class="live-item" id="live-${productId}"><div class="live-thumb">${p.image_url ? `<img src="${p.image_url}">` : '✦'}</div><div class="live-details"><div class="live-name">${escapeHtml(p.name)}</div><div class="live-mat">${p.category}${p.material ? ' · '+p.material : ''}</div><div class="live-price">€${p.price}</div></div><button class="live-delete" onclick="deleteProduct('${productId}')" title="Delete">✕</button></div>`;
+        const formattedPrice = formatPriceWithCurrency(p.price);
+        return `<div class="live-item" id="live-${productId}"><div class="live-thumb">${p.image_url ? `<img src="${p.image_url}">` : '✦'}</div><div class="live-details"><div class="live-name">${escapeHtml(p.name)}</div><div class="live-mat">${p.category}${p.material ? ' · '+p.material : ''}</div><div class="live-price" data-original-price="${p.price}">${formattedPrice}</div></div><button class="live-delete" onclick="deleteProduct('${productId}')" title="Delete">✕</button></div>`;
     }).join('');
 }
 
@@ -653,7 +739,7 @@ function addToCart(productId) {
     if (!product) return;
     const existing = cart.find(item => (item._id || item.id) == productId);
     if (existing) { existing.quantity = (existing.quantity || 1) + 1; } 
-    else { cart.push({...product, quantity: 1}); }
+    else { cart.push({...product, quantity: 1, originalPrice: product.price}); }
     saveCart();
     showToast('✨ ' + product.name + ' added to cart');
 }
@@ -674,20 +760,24 @@ function updateCartUI() {
     if (!container) return;
     if (cart.length === 0) {
         container.innerHTML = '<div class="empty-cart">✨ Your cart is empty ✨</div>';
-        totalSpan.innerText = '€0';
+        totalSpan.innerText = currentCurrency === 'MAD' ? 'DH0' : '$0';
+        totalSpan.setAttribute('data-original-total', '0');
         countSpan.innerText = '0';
         return;
     }
-    let total = 0;
+    let totalUSD = 0;
     let itemCount = 0;
     container.innerHTML = cart.map(item => {
         const priceNum = parseInt(item.price.replace(/,/g, ''));
-        const itemTotal = priceNum * (item.quantity || 1);
-        total += itemTotal;
+        const itemTotalUSD = priceNum * (item.quantity || 1);
+        totalUSD += itemTotalUSD;
         itemCount += (item.quantity || 1);
-        return `<div class="cart-item"><div class="cart-item-img">${item.image_url ? `<img src="${item.image_url}">` : '✦'}</div><div class="cart-item-details"><div class="cart-item-name">${escapeHtml(item.name)}</div><div class="cart-item-price">€${item.price}</div><div>Qty: ${item.quantity || 1}</div></div><button class="cart-item-remove" onclick="removeFromCart('${item._id || item.id}')">Remove</button></div>`;
+        const formattedPrice = formatPriceWithCurrency(item.price);
+        return `<div class="cart-item"><div class="cart-item-img">${item.image_url ? `<img src="${item.image_url}">` : '✦'}</div><div class="cart-item-details"><div class="cart-item-name">${escapeHtml(item.name)}</div><div class="cart-item-price" data-original-price="${item.price}">${formattedPrice}</div><div>Qty: ${item.quantity || 1}</div></div><button class="cart-item-remove" onclick="removeFromCart('${item._id || item.id}')">Remove</button></div>`;
     }).join('');
-    totalSpan.innerText = '€' + total.toLocaleString();
+    const totalDisplay = currentCurrency === 'MAD' ? 'DH' + (totalUSD * USD_TO_MAD_RATE).toLocaleString() : '$' + totalUSD.toLocaleString();
+    totalSpan.innerText = totalDisplay;
+    totalSpan.setAttribute('data-original-total', totalUSD.toString());
     countSpan.innerText = itemCount;
 }
 
@@ -695,8 +785,9 @@ function toggleCart() { document.getElementById('cartSidebar').classList.toggle(
 
 function checkout() {
     if (cart.length === 0) { alert('Your cart is empty. Add some pieces first!'); return; }
-    let total = cart.reduce((sum, item) => sum + (parseInt(item.price.replace(/,/g, '')) * (item.quantity || 1)), 0);
-    alert(`✨ ORDER PLACED ✨\n\nTotal: €${total.toLocaleString()}\nPayment: Cash on Delivery\n\nThank you for shopping at ELINA!`);
+    let totalUSD = cart.reduce((sum, item) => sum + (parseInt(item.price.replace(/,/g, '')) * (item.quantity || 1)), 0);
+    const totalDisplay = currentCurrency === 'MAD' ? 'DH' + (totalUSD * USD_TO_MAD_RATE).toLocaleString() : '$' + totalUSD.toLocaleString();
+    alert(`✨ ORDER PLACED ✨\n\nTotal: ${totalDisplay}\nPayment: Cash on Delivery\n\nThank you for shopping at ELINA!`);
     cart = [];
     saveCart();
     toggleCart();
@@ -708,9 +799,11 @@ function openProductModal(productId) {
     currentProductId = productId;
     const product = allProducts.find(p => (p._id || p.id) == productId);
     if (!product) return;
+    const formattedPrice = formatPriceWithCurrency(product.price);
     document.getElementById('modalImg').src = product.image_url || 'https://placehold.co/400x400/F5D6D8/5C4B4B?text=ELINA';
     document.getElementById('modalTitle').innerText = product.name;
-    document.getElementById('modalPrice').innerText = '€' + product.price;
+    document.getElementById('modalPrice').innerHTML = formattedPrice;
+    document.getElementById('modalPrice').setAttribute('data-original-price', product.price);
     document.getElementById('modalMaterial').innerHTML = product.material || product.category;
     document.getElementById('modalDesc').innerText = product.description || 'Handcrafted with love in our Morocco atelier.';
     document.getElementById('productModal').style.display = 'flex';
@@ -719,7 +812,10 @@ function openSignatureModal() { if(allProducts.length > 0) openProductModal(allP
 function closeModal() { document.getElementById('productModal').style.display = 'none'; currentProductId = null; }
 function orderFromModal() {
     const product = allProducts.find(p => (p._id || p.id) == currentProductId);
-    if(product) alert(`✨ ORDER PLACED ✨\n\nPiece: ${product.name}\nAmount: €${product.price}\nPayment: Cash on Delivery`);
+    if(product) {
+        const formattedPrice = formatPriceWithCurrency(product.price);
+        alert(`✨ ORDER PLACED ✨\n\nPiece: ${product.name}\nAmount: ${formattedPrice}\nPayment: Cash on Delivery`);
+    }
     closeModal();
 }
 function addCurrentToCart() { if(currentProductId) { addToCart(currentProductId); closeModal(); } }
